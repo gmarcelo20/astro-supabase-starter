@@ -3001,19 +3001,49 @@ Antecedentes Normativos
   <!-- Script sencillo para búsqueda instantánea -->
   <script is:inline>
   document.getElementById('buscador').addEventListener('input', function(e) {
-    const texto = e.target.value.toLowerCase();
     const contenido = document.querySelector('.contenido-codigo');
-    
+    const texto = e.target.value.trim().toLowerCase();
+
     if (!contenido) return;
 
-    const htmlOriginal = contenido.innerHTML.replace(/<mark>|<\/mark>/g, '');
-    contenido.innerHTML = htmlOriginal;
+    contenido.innerHTML = contenido.innerHTML.replace(/<mark class="bg-yellow-300">|<\/mark>/g, '');
 
     if (texto) {
-      const regex = new RegExp(`(${texto})`, 'gi');
-      contenido.innerHTML = contenido.innerHTML.replace(regex, '<mark>$1</mark>');
+      const palabras = texto.split('+').map(t => t.trim()).filter(t => t);
+      if (palabras.length === 0) return;
+
+      const regex = new RegExp(`(${palabras.join('|')})`, 'gi');
+      contenido.innerHTML = contenido.innerHTML.replace(regex, '<mark class="bg-yellow-300">$1</mark>');
+
+      window.resultadosBusqueda = Array.from(document.querySelectorAll('mark'));
+      window.resultadoActual = 0;
+
+      if (window.resultadosBusqueda.length > 0) {
+        window.resultadosBusqueda[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
   });
+
+  // Botones siguiente y anterior
+  function irASiguiente() {
+    if (window.resultadosBusqueda && window.resultadosBusqueda.length > 0) {
+      window.resultadoActual = (window.resultadoActual + 1) % window.resultadosBusqueda.length;
+      window.resultadosBusqueda[window.resultadoActual].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function irAAnterior() {
+    if (window.resultadosBusqueda && window.resultadosBusqueda.length > 0) {
+      window.resultadoActual = (window.resultadoActual - 1 + window.resultadosBusqueda.length) % window.resultadosBusqueda.length;
+      window.resultadosBusqueda[window.resultadoActual].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
 </script>
+
+<!-- Botones de navegación siguiente/anterior -->
+<div class="mt-4 flex justify-center gap-4">
+  <button onclick="irAAnterior()" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Anterior</button>
+  <button onclick="irASiguiente()" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Siguiente</button>
+</div>
 
 </Layout>
