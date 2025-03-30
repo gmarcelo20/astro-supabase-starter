@@ -7,7 +7,16 @@ import Layout from "../components/Layout.astro";
     <h1 class="text-3xl font-bold mb-6">Código Penal</h1>
     <p>Aquí podrás consultar el texto actualizado del Código Penal, descargar versiones PDF, utilizar herramientas inteligentes y mucho más.</p>
 
-<div class="mt-8 text-gray-200 whitespace-pre-line text-justify">
+    <!-- Campo de búsqueda claro -->
+    <input
+      id="buscador"
+      type="text"
+      placeholder="Buscar en el Código Penal..."
+      class="border border-gray-300 p-2 rounded-lg w-full mb-4"
+    />
+
+    <!-- Contenido del Código Penal con clase especial -->
+    <div class="mt-8 text-gray-200 whitespace-pre-line text-justify contenido-codigo">
 
 CODIGO PENAL DE LA NACION ARGENTINA
 
@@ -2986,8 +2995,24 @@ Antecedentes Normativos
 - Artículo 204, monto actualizado por art. 1° de la Ley N° 23.479, 16/1/1987;
 
 - Artículo 279, sustituido por art. 1° de la Ley N° 23.468 26/1/1987.
-
-    </div>
-
+  </div>
   </section>
+
+  <!-- Script sencillo para búsqueda instantánea -->
+  <script>
+    document.getElementById('buscador').addEventListener('input', function(e) {
+      const texto = e.target.value.toLowerCase();
+      const contenido = document.querySelector('.contenido-codigo');
+      
+      if (!contenido) return;
+
+      const htmlOriginal = contenido.innerHTML.replace(/<mark>|<\/mark>/g, '');
+      contenido.innerHTML = htmlOriginal;
+
+      if (texto) {
+        const regex = new RegExp(`(${texto})`, 'gi');
+        contenido.innerHTML = contenido.innerHTML.replace(regex, '<mark>$1</mark>');
+      }
+    });
+  </script>
 </Layout>
