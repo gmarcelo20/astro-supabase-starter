@@ -2999,20 +2999,21 @@ Antecedentes Normativos
   </section>
 
   <!-- Script sencillo para búsqueda instantánea -->
-  <script>
-    document.getElementById('buscador').addEventListener('input', function(e) {
-      const texto = e.target.value.toLowerCase();
-      const contenido = document.querySelector('.contenido-codigo');
-      
-      if (!contenido) return;
+  <script is:inline>
+  document.getElementById('buscador').addEventListener('input', function(e) {
+    const texto = e.target.value.toLowerCase();
+    const contenido = document.querySelector('.contenido-codigo');
+    
+    if (!contenido) return;
 
-      const htmlOriginal = contenido.innerHTML.replace(/<mark>|<\/mark>/g, '');
-      contenido.innerHTML = htmlOriginal;
+    const htmlOriginal = contenido.innerHTML.replace(/<mark>|<\/mark>/g, '');
+    contenido.innerHTML = htmlOriginal;
 
-      if (texto) {
-        const regex = new RegExp(`(${texto})`, 'gi');
-        contenido.innerHTML = contenido.innerHTML.replace(regex, '<mark>$1</mark>');
-      }
-    });
-  </script>
+    if (texto) {
+      const regex = new RegExp(`(${texto})`, 'gi');
+      contenido.innerHTML = contenido.innerHTML.replace(regex, '<mark>$1</mark>');
+    }
+  });
+</script>
+
 </Layout>
